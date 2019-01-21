@@ -25,6 +25,8 @@ package main
 
 import (
 	"github.com/ameliaikeda/sakura"
+	"github.com/ameliaikeda/sakura/uploader"
+	"github.com/ameliaikeda/sakura/processor"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -70,14 +72,14 @@ func main() {
 	manager := s3()
 
 	// new up a sakura thumbnailer
-	uploader := sakura.NewUploader(&sakura.UploaderConfig{
+	u := uploader.New(&sakura.UploaderConfig{
 		Manager: manager,
 		ImageBucket: imageBucket,
 		ThumbnailBucket: thumbnailBucket,
 	})
 
 	// create a sakura client which doubles as a handler.
-	s := sakura.New(uploader, &sakura.Config{
+	s := processor.New(u, &sakura.Config{
 		MaxHeight: maxHeight,
 		MaxWidth: maxWidth,
 	})
